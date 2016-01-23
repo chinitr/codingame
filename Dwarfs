@@ -1,0 +1,61 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+using namespace std;
+
+int getlength(int node, std::map<int, std::set<int> >& relations)
+{
+    std::map<int, std::set<int> >::iterator itr = relations.find(node);
+    if (itr == relations.end())
+        return 1;
+    
+    int length = 1;
+    int maxlen = 0;
+    std::set<int>& items = itr->second;
+    std::set<int>::iterator itemitr = items.begin();
+    for (; itemitr != items.end(); ++itemitr) {
+        int n = *itemitr;
+        int len = getlength(n, relations);
+        if (len > maxlen)
+            maxlen = len;
+    }
+    length += maxlen;
+    return length;
+}
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+int main()
+{
+    int n; // the number of relationships of influence
+    cin >> n; cin.ignore();
+    
+    std::map<int, std::set<int> > relations;
+    for (int i = 0; i < n; i++) {
+        int x; // a relationship of influence between two people (x influences y)
+        int y;
+        cin >> x >> y; cin.ignore();
+        cerr << x << " " << y << endl;
+        
+        std::set<int>& items = relations[x];
+        items.insert(y);
+    }
+    
+    int maxlen = 0;
+    std::map<int, std::set<int> >::iterator itr = relations.begin();
+    for (; itr != relations.end(); ++itr) {
+        int node = itr->first;
+        int len = getlength(node, relations);
+        if (len > maxlen)
+            maxlen = len;
+    }
+    // Write an action using cout. DON'T FORGET THE "<< endl"
+    // To debug: cerr << "Debug messages..." << endl;
+
+    cout << maxlen << endl; // The number of people involved in the longest succession of influences
+}
