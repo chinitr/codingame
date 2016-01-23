@@ -1,0 +1,129 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+using namespace std;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+int main()
+{
+    int N;
+    cin >> N; cin.ignore();
+    std::map<char, int> charpoint;
+    charpoint.insert(std::make_pair('u', 1));
+    charpoint.insert(std::make_pair('s', 1));
+    charpoint.insert(std::make_pair('l', 1));
+    charpoint.insert(std::make_pair('t', 1));
+    charpoint.insert(std::make_pair('r', 1));
+    charpoint.insert(std::make_pair('n', 1));
+    charpoint.insert(std::make_pair('o', 1));
+    charpoint.insert(std::make_pair('i', 1));
+    charpoint.insert(std::make_pair('a', 1));
+    charpoint.insert(std::make_pair('e', 1));
+    charpoint.insert(std::make_pair('d', 2));
+    charpoint.insert(std::make_pair('g', 2));
+    charpoint.insert(std::make_pair('b', 3));
+    charpoint.insert(std::make_pair('c', 3));
+    charpoint.insert(std::make_pair('m', 3));
+    charpoint.insert(std::make_pair('p', 3));
+    charpoint.insert(std::make_pair('f', 4));
+    charpoint.insert(std::make_pair('h', 4));
+    charpoint.insert(std::make_pair('v', 4));
+    charpoint.insert(std::make_pair('w', 4));
+    charpoint.insert(std::make_pair('y', 4));
+    charpoint.insert(std::make_pair('k', 5));
+    charpoint.insert(std::make_pair('j', 8));
+    charpoint.insert(std::make_pair('x', 8));
+    charpoint.insert(std::make_pair('q', 10));
+    charpoint.insert(std::make_pair('z', 10));
+                
+    std::set<std::string> test;
+    std::map<int, std::vector<std::string> > wordpoint;
+    for (int i = 0; i < N; i++) {
+        string W;
+        getline(cin, W);
+        
+        if (W.size() > 7) {
+            continue;
+        }
+        
+        std::set<char> chars;    
+        bool valid = true;
+        int point = 0;
+        for (size_t index = 0; index < W.size(); ++index) {
+            char c = W[index];
+            /*if (chars.find(c) != chars.end()) {
+                valid = false;
+                cerr << "have same letter" << endl;
+                break;
+            }*/
+            chars.insert(c);
+            int cp = charpoint[c];
+            point += cp;
+        }
+        
+        if (valid) {
+            std::vector<std::string>& items = wordpoint[point];
+            items.push_back(W);            
+            
+            cerr << W << "=" << point << endl;
+        }
+    }
+    
+    string LETTERS;
+    getline(cin, LETTERS);
+    cerr << "LETTERS=" << LETTERS << endl;
+    std::set<char> chars;
+    for (size_t i = 0; i < LETTERS.size(); ++i) {
+        chars.insert(LETTERS[i]);
+    }
+    
+    string word;
+    std::vector<std::string> saved;
+    std::map<int, std::vector<std::string> >::reverse_iterator ritr = wordpoint.rbegin();
+    for (; ritr != wordpoint.rend(); ++ritr) {
+        int point = ritr->first;
+        std::vector<std::string>& items = ritr->second;
+        for (size_t i = 0; i < items.size(); ++i) {
+            std::string& str = items[i];
+            bool allin = true;
+            
+            std::set<char> samechars;
+            
+            for (size_t index = 0; index < str.size(); ++index) {
+                char c = str[index];
+                if (chars.find(c) == chars.end()) {
+                    allin = false;
+                    break;
+                }
+                if (samechars.find(c) != samechars.end()) {
+                    saved.push_back(str);
+                    allin = false;
+                    break;
+                }
+                samechars.insert(c);
+            }
+            
+            if (allin) {
+                word = str;
+                cerr << word << "=" << point << endl;
+                break;
+            }
+        }
+        if (word.size() > 0)
+            break;
+    }
+    // Write an action using cout. DON'T FORGET THE "<< endl"
+    // To debug: cerr << "Debug messages..." << endl;
+    // pastern=9
+    if (word.size() == 0 && saved.size() > 0) {
+        cout << saved[0] << endl;
+    } else{
+        cout << word << endl;
+    }
+}
