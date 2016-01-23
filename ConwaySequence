@@ -1,0 +1,60 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void printline(std::vector<int>& line)
+{
+    for (size_t i = 0; i < line.size(); ++i) {
+        cerr << line[i];
+        cerr << " ";
+    }
+    cerr << endl;
+}
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+int main()
+{
+    int R;
+    cin >> R; cin.ignore();
+    int L;
+    cin >> L; cin.ignore();
+
+    // Write an action using cout. DON'T FORGET THE "<< endl"
+    // To debug: cerr << "Debug messages..." << endl;
+    std::vector<int> line;
+    line.push_back(R);
+    
+    for (int i = 0; i < L - 1; ++i) {
+        std::vector<int> newline;
+        
+        for (size_t i = 0; i < line.size();) {
+            int value = line[i];
+            int nItem = 1;
+            int n = i + 1;
+            for (; n < line.size(); ++n) {
+                if (line[n] != value)
+                    break;
+                nItem++;
+            }
+            
+            i += nItem;
+            newline.push_back(nItem);
+            newline.push_back(value);
+        }
+        line = newline;
+        //printline(line);
+    }
+    
+    for (size_t i = 0; i < line.size(); ++i) {
+        cout << line[i];
+        if (i + 1 < line.size())
+            cout << " ";
+    }
+    cout << endl;
+}
